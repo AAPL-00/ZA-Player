@@ -1,6 +1,6 @@
-# DirPlaylister 🎵
+# ZKA-Player🎵
 
-**DirPlaylister** es una aplicación de consola escrita en Python que permite escanear directorios locales para detectar archivos de audio y gestionar listas de reproducción mediante operaciones como ordenar, barajar, guardar y cargar.
+**ZKA-Player** es una aplicación de consola escrita en Python que permite escanear directorios locales para detectar archivos de audio y gestionar listas de reproducción mediante operaciones como ordenar, barajar, guardar y cargar.
 
 > El proyecto nace como una demostración práctica de paradigmas de programación (imperativo, funcional y asincrónico) y tiene como objetivo evolucionar hacia un reproductor de música completo y usable desde la terminal.
 
