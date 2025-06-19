@@ -1,5 +1,4 @@
 .venv/
 pyproject.toml
 .ropeproject
-main.py
 src/__pycache__
