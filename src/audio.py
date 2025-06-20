@@ -36,4 +36,20 @@ async def play_playlist(tracks: list[tuple[str, str]]):
     for track in tracks:
         play_audio(track)
         while pygame.mixer.music.get_busy():
-            await asyncio.sleep(1)
+            print("Comandos: [p]ausa, [r]eanudar, [s]iguiente, [q]uit")
+            comando = input("> ").strip().lower()
+            if comando == 'p':
+                pygame.mixer.music.pause()
+            elif comando == 'r':
+                pygame.mixer.music.unpause()
+            elif comando == 's':
+                pygame.mixer.music.stop()
+                # Sal del bucle para ir a la siguiente canción
+                break
+            elif comando == 'q':
+                pygame.mixer.music.stop()
+                # Sal completamente de la playlist
+                return
+            # Si el comando no es 's' ni 'q', NO haces break, sigues esperando input
+            # Puedes agregar un pequeño sleep si quieres evitar consumir CPU
+            await asyncio.sleep(0.1)
