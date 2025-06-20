@@ -1,25 +1,39 @@
 import pygame
 import asyncio
 
+
 def init_mixer():
-    try:
-        pygame.mixer.init()
-        print("[INFO] Mezclador de audio inicializado.")
-    except Exception as e:
-        print(f"[ERROR] No se pudo inicializar el mezclador: {e}")
+    """
+    Initializes the pygame mixer for audio playback.
+    """
+    pygame.mixer.init()
 
-def play_audio(path):
+
+def play_audio(track: tuple[str, str]):
+    """
+    Plays an audio file and displays its title.
+
+    Args:
+        path (str): File path to the audio file.
+        title (str): Song title to display.
+    """
     try:
-        pygame.mixer.music.load(path)
+        pygame.mixer.music.load(track[0])
         pygame.mixer.music.play()
-        print(f"[INFO] Reproduciendo: {path}")
+        print(f"[INFO] Playing: {track[1]} 🎶")
     except Exception as e:
-        print(f"[ERROR] Error cargando {path}: {e}")
+        print(f"[ERROR] Oh no! Couldn't play {track[1]}: {e}")
 
-async def play_playlist(tracks: list[str]):
-    print("DEBUG")
-    for path in tracks:
-        play_audio(path)
-        # Esperar hasta que termine de sonar
+
+async def play_playlist(tracks: list[tuple[str, str]]):
+    """
+    Plays a list of audio tracks asynchronously, displaying their titles.
+
+    Args:
+        tracks (list[tuple[str, str]]): List of (path, title) tuples.
+    """
+    print("DEBUG: Starting playlist")
+    for track in tracks:
+        play_audio(track)
         while pygame.mixer.music.get_busy():
-            await asyncio.sleep(1)  # no bloquea el event loop
+            await asyncio.sleep(1)
