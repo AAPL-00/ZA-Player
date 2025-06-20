@@ -3,7 +3,9 @@ import aiofiles
 from pathlib import Path
 from .files_manager import find_audio_files, extract_metadata
 
-DEFAULT_REPO_PATH = str(Path.home() / "music" / "zka_repository.json")
+
+DEFAULT_REPO_PATH = str(Path.home() / "za_player" / "za_repository.json")
+
 
 async def load_repository():
     path_obj = Path(DEFAULT_REPO_PATH)
@@ -16,6 +18,7 @@ async def load_repository():
     async with aiofiles.open(DEFAULT_REPO_PATH) as file:
         content = await file.read()
         return json.loads(content)
+
 
 async def save_repository(data):
     async with aiofiles.open(DEFAULT_REPO_PATH, mode='w') as file:
