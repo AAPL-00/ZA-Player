@@ -2,10 +2,14 @@ import json
 import aiofiles
 from pathlib import Path
 from .files_manager import find_audio_files, extract_metadata
+import logging
 
+# Configure logging for better debugging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
+# Use pathlib to ensure cross-platform compatibility
 DEFAULT_REPO_PATH = str(Path.home() / "za_player" / "za_repository.json")
-
 
 async def load_repository():
     """
@@ -19,21 +23,33 @@ async def load_repository():
         dict: A dictionary representing the music library, where keys are file paths
             and values are metadata tuples. Returns an empty dictionary if the
             repository is new or empty.
+
+    Raises:
+        PermissionError: If the process lacks permission to access or create the file.
+        OSError: For other file system-related errors.
     """
-    path_obj = Path(DEFAULT_REPO_PATH)
-    if not path_obj.exists():
-        path_obj.parent.mkdir(parents=True, exist_ok=True)
-        async with aiofiles.open(DEFAULT_REPO_PATH, mode='w') as file:
-            await file.write("{}")
-            print("[INFO] No se ha encontrado un repositorio, se ha creado uno nuevo.")
+    path_obj = Path(DEFAULT_REPO_PATH).resolve()  # Normalize path for Windows compatibility
+    try:
+        if not path_obj.exists():
+            path_obj.parent.mkdir(parents=True, exist_ok=True)
+            async with aiofiles.open(path_obj, mode='w', encoding='utf-8') as file:
+                await file.write("{}")
+                logger.info("No se ha encontrado un repositorio, se ha creado uno nuevo.")
+            return {}
+
+        async with aiofiles.open(path_obj, mode='r', encoding='utf-8') as file:
+            content = await file.read()
+            logger.info("Se ha cargado el repositorio.")
+            return json.loads(content)
+    except PermissionError as e:
+        logger.error(f"No se pudo acceder o crear el repositorio en {path_obj}: {e}")
         return {}
-
-    async with aiofiles.open(DEFAULT_REPO_PATH) as file:
-        content = await file.read()
-        return json.loads(content)
-        print("[INFO] Se ha cargado el repositorio.")
-
-
+    except OSError as e:
+        logger.error(f"Error del sistema al cargar el repositorio en {path_obj}: {e}")
+        return {}
+    except json.JSONDecodeError as e:
+        logger.error(f"Error al decodificar el archivo JSON {path_obj}: {e}")
+        return {}
 
 async def save_repository(data):
     """
@@ -45,11 +61,20 @@ async def save_repository(data):
 
     Args:
         data (dict): The dictionary containing the music library data to be saved.
-    """
-    async with aiofiles.open(DEFAULT_REPO_PATH, mode='w') as file:
-        await file.write(json.dumps(data, indent=2, ensure_ascii=False))
-        print("[INFO] Guardado exitosamente.")
 
+    Raises:
+        PermissionError: If the process lacks permission to write to the file.
+        OSError: For other file system-related errors.
+    """
+    path_obj = Path(DEFAULT_REPO_PATH).resolve()  # Normalize path for Windows compatibility
+    try:
+        async with aiofiles.open(path_obj, mode='w', encoding='utf-8') as file:
+            await file.write(json.dumps(data, indent=2, ensure_ascii=False))
+            logger.info("Guardado exitosamente.")
+    except PermissionError as e:
+        logger.error(f"No se pudo escribir en {path_obj}: {e}")
+    except OSError as e:
+        logger.error(f"Error del sistema al guardar el repositorio en {path_obj}: {e}")
 
 async def update_repository(paths):
     """
@@ -61,18 +86,26 @@ async def update_repository(paths):
     entry to the library. Finally, it saves the updated repository back to disk.
 
     Args:
-        path_to_scan (str): The path to the directory to scan for new audio files.
+        paths (str): The path to the directory to scan for new audio files.
+
+    Raises:
+        FileNotFoundError: If the provided path does not exist.
     """
-    repo = await load_repository()
-    audio_files_paths = await find_audio_files(paths)
-    new_entries = {
+    try:
+        repo = await load_repository()
+        audio_files_paths = await find_audio_files(paths)
+        new_entries = {
             file_path: extract_metadata(file_path)[file_path]
             for file_path in audio_files_paths
             if file_path not in repo
-    }
-    if not new_entries:
-        print("[INFO] No hay archivos nuevos para agregar.")
-        return
+        }
+        if not new_entries:
+            logger.info("No hay archivos nuevos para agregar.")
+            return
 
-    repo.update(new_entries)
-    await save_repository(repo)
+        repo.update(new_entries)
+        await save_repository(repo)
+    except FileNotFoundError as e:
+        logger.error(f"No se pudo escanear el directorio {paths}: {e}")
+    except Exception as e:
+        logger.error(f"Error inesperado al actualizar el repositorio: {e}")
