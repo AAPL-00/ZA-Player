@@ -125,8 +125,6 @@ async def main():
             console.print("\n🌸 [bold red]Oh noes! No songies fow this mode! >w<[/bold red]")
             return
 
-        console.print("[dim]Pssst! Use: p (pawsie), r (wesume), s (skippy), q (quit) >w<[/dim]")
-
         # Custom progress bar with a sparkly heart spinner
         with Progress(
             SpinnerColumn(spinner_name="hearts", style="bright_magenta"),  # Heart spinner for extra cuteness

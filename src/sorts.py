@@ -1,5 +1,6 @@
 import random
 
+
 def random_sort(repo: dict) -> list[tuple[str, str]]:
     """
     Generates a randomly shuffled playlist from the repository.

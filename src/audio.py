@@ -116,23 +116,17 @@ async def play_playlist(tracks: list[tuple[str, str]]):
     Args:
         tracks (list[tuple[str, str]]): List of (path, title) tuples.
     """
-    # Create a stop event to signal when to exit
     stop_event = asyncio.Event()
-
-    # Start control task
     control_task = asyncio.create_task(control_playback(stop_event))
-
+    
     try:
         for track in tracks:
             play_audio(track)
-            # Wait while track is playing or paused
             while (pygame.mixer.music.get_busy() or pygame.mixer.music.get_pos() > 0) and not stop_event.is_set():
                 await asyncio.sleep(0.1)
-            # If stopped manually (e.g., skip or quit), check stop_event
             if stop_event.is_set():
                 break
     finally:
-        # Signal control task to stop and wait for it to finish
         stop_event.set()
         await control_task
         pygame.mixer.music.stop()

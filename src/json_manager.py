@@ -29,6 +29,7 @@ async def load_repository():
         OSError: For other file system-related errors.
     """
     path_obj = Path(DEFAULT_REPO_PATH).resolve()  # Normalize path for Windows compatibility
+
     try:
         if not path_obj.exists():
             path_obj.parent.mkdir(parents=True, exist_ok=True)
@@ -51,6 +52,7 @@ async def load_repository():
         logger.error(f"Error al decodificar el archivo JSON {path_obj}: {e}")
         return {}
 
+
 async def save_repository(data):
     """
     Asynchronously saves the music library dictionary to a JSON file.
@@ -67,6 +69,7 @@ async def save_repository(data):
         OSError: For other file system-related errors.
     """
     path_obj = Path(DEFAULT_REPO_PATH).resolve()  # Normalize path for Windows compatibility
+
     try:
         async with aiofiles.open(path_obj, mode='w', encoding='utf-8') as file:
             await file.write(json.dumps(data, indent=2, ensure_ascii=False))
@@ -75,6 +78,7 @@ async def save_repository(data):
         logger.error(f"No se pudo escribir en {path_obj}: {e}")
     except OSError as e:
         logger.error(f"Error del sistema al guardar el repositorio en {path_obj}: {e}")
+
 
 async def update_repository(paths):
     """
