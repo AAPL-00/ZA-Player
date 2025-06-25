@@ -1,56 +1,31 @@
-# ZA-Player
+# 🌸 ZA-Player 🎵
 
-A minimalist, command-line audio player built with Python, designed for music enthusiasts to manage and enjoy their local audio collections with a simple, terminal-based interface.
+A minimalist yet powerful audio player built in Python, designed to manage and play your music collection with a touch of cuteness! ZA-Player supports asynchronous playback, metadata extraction, and a user-friendly console interface powered by `rich`. Whether you're shuffling your entire library or enjoying a specific album, ZA-Player has you covered! >w<
 
-## Features
-- **Asynchronous Audio Playback**: Plays various audio formats (MP3, FLAC, OGG, WAV, AAC, M4A, WMA, ALAC, OPUS) using `pygame` mixer.
-- **Metadata Extraction**: Automatically retrieves title, artist, album, and duration from audio files using `mutagen`.
-- **Playlist Management**: Supports random playback, album-based, or artist-based playlists with randomized order.
-- **Interactive Terminal UI**: Built with `rich` for a visually appealing interface, including tables, panels, and colored prompts.
-- **Cross-Platform File Handling**: Uses `pathlib` for robust directory scanning and JSON-based repository management.
-- **Asynchronous Control**: Handles keyboard input for pause (`p`), resume (`r`), skip (`s`), and quit (`q`) commands during playback.
-- **Repository Persistence**: Stores metadata in a JSON file (`~/.za_player/za_repository.json`) for quick library access and updates.
+## ✨ Features
 
+- **Music Library Management**: Scan directories for audio files (`mp3`, `flac`, `wav`, etc.) and store metadata (title, artist, album, duration) in a JSON repository.
+- **Playback Modes**: Play songs randomly, by album, or by artist with a simple command-line interface.
+- **Interactive Controls**: Pause (`p`), resume (`r`), skip (`s`), or quit (`q`) playback in real-time.
+- **Asynchronous I/O**: Efficiently handles file operations and playback using `asyncio` and `aiofiles`.
+- **Rich Console UI**: Beautiful and intuitive interface with tables, progress bars, and cute ASCII art (in `alt_main.py`).
+- **Cross-Platform Support**: Works on Windows, Linux, and macOS (with minor adjustments for input handling).
 
-## Usage
-1. **Launch the Player**:
-   Run `python main.py` to start the application. You'll see a welcome banner and options to manage your music library.
+## 🎶 Usage
 
-2. **Add Songs**:
-   - Choose `y` when prompted to add songs.
-   - Enter the path to your audio files directory. The player will scan for supported formats and update the repository.
-
-3. **View Library**:
-   - The song library is displayed in a table showing title, artist, album, and duration.
-   - If the library is empty, you'll be notified.
-
-4. **Play Songs**:
-   - Choose `y` to start playback.
-   - Select a playback mode:
-     - `r`: Random shuffle of all songs.
-     - `a`: Play songs from a specific album (select from a numbered list).
-     - `t`: Play songs by a specific artist (select from a numbered list).
-   - Control playback with:
-     - `p`: Pause
-     - `r`: Resume
-     - `s`: Skip to next track
-     - `q`: Quit playback
+1. **Launch the Player**: Run `main.py` or `alt_main.py`.
+2. **Add Songs**: When prompted, enter a directory path to scan for audio files. Metadata is extracted and saved to `za_repository.json`.
+3. **View Library**: See a table of your songs with titles, artists, albums, and durations.
+4. **Play Music**:
+   - Choose a playback mode: random (`r`), by album (`a`), or by artist (`t`).
+   - Use `p` (pause), `r` (resume), `s` (skip), or `q` (quit) during playback.
+5. **Enjoy!**: Let ZA-Player fill your world with music! 🌼✨
 
 
-## Limitations
-- **Platform-Specific Input**:
-  - Keyboard input for playback control is optimized for Windows (`msvcrt`). Linux/MacOS support requires adjustments using `termios` and `select`.
-- **File I/O**:
-  - The player scans local directories only and does not support streaming or network-based audio.
-- **Error Handling**:
-  - Metadata extraction may fail for corrupted files, defaulting to "Unknown" values.
-- **Pygame Compatibility**:
-  - Relies on `pygame.mixer`, which may have issues with certain audio formats or large files on some systems.
+## 🐛 Known Issues
 
-## Future Improvements
-- Add support for custom playlists.
-- Implement sorting by duration or file path.
-- Enhance cross-platform input handling for Linux/MacOS.
-- Add progress bar or playback time display.
-- Support for gapless playback.
-- Integrate unit tests for robustness.
+- Linux/macOS input handling may require `new_audio_linux.py` for optimal performance.
+- Some audio formats may fail to load if `pygame` or `mutagen` lack codec support.
+- Windows-specific input handling in `audio.py` uses `msvcrt`, which is not portable.
+
+🎵 *Happy listening with ZA-Player!* ✨
