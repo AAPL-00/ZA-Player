@@ -5,7 +5,6 @@ from rich.table import Table
 from rich.prompt import Prompt
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.text import Text
-from src.files_manager import find_audio_files, extract_metadata
 from src.json_manager import load_repository, update_repository
 from src.audio import init_mixer, play_playlist
 from src.sorts import random_sort, album_sort, artist_sort
