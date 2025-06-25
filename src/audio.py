@@ -3,7 +3,7 @@ import asyncio
 import threading
 import queue
 import sys
-import msvcrt  # Para Windows; para Linux/MacOS, necesitarás ajustes
+import msvcrt  # Para Windows
 
 
 def init_mixer():
@@ -41,21 +41,6 @@ def read_input(q: queue.Queue, stop_event: threading.Event):
             if msvcrt.kbhit():
                 key = msvcrt.getch().decode()
                 q.put(key)
-        else:
-            # Para Linux/MacOS, usa termios/select
-            import select
-            import tty
-            import termios
-            fd = sys.stdin.fileno()
-            old_settings = termios.tcgetattr(fd)
-            try:
-                tty.setraw(sys.stdin.fileno())
-                if select.select([sys.stdin], [], [], 0.1)[0]:
-                    key = sys.stdin.read(1)
-                    q.put(key)
-            finally:
-                termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-            asyncio.sleep(0.1)
 
 
 async def control_playback(stop_event: asyncio.Event):

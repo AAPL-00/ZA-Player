@@ -1,3 +1,8 @@
+'''
+This code is subject to revision, I do not fully understand how the tty and termios libraries work.
+It's organized this way because I tried to integrate logic for windows and linux but I wasn't able to.
+'''
+
 import pygame
 import asyncio
 import threading

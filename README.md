@@ -24,7 +24,7 @@ A minimalist yet powerful audio player built in Python, designed to manage and p
 
 ## 🐛 Known Issues
 
-- Linux/macOS input handling may require `new_audio_linux.py` for optimal performance.
+- Linux/macOS input handling may require `audio_linux.py` for better performance.
 - Some audio formats may fail to load if `pygame` or `mutagen` lack codec support.
 - Windows-specific input handling in `audio.py` uses `msvcrt`, which is not portable.
 
