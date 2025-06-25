@@ -1,6 +1,7 @@
 '''
 This code is subject to revision, I do not fully understand how the tty and termios libraries work.
-It's organized this way because I tried to integrate logic for windows and linux but I wasn't able to.
+It's organized this way because I tried to integrate logic for windows and linux but I wasn't able to, is easier to 
+work with msvcrt library in windows an this is windows exclusive, that's the problem
 '''
 
 import pygame
